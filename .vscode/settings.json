@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "defs.h": "c",
+        "stdlib.h": "c",
+        "string.h": "c",
+        "typeinfo": "c",
+        "stdio.h": "c",
+        "time.h": "c",
+        "timeb.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c",
+        "inet.h": "c",
+        "semaphore.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}

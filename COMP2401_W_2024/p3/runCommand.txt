@@ -1,0 +1,1 @@
+gcc -o phoneSimulation.exe phoneSimulation.c phoneNetwork.c -Wall -Wextra -g

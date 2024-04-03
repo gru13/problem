@@ -1,0 +1,141 @@
+defs.h                                                                                              0000644 0001750 0001750 00000002036 14511246652 012333  0                                                                                                    ustar   claurend                        claurend                                                                                                                                                                                                               #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define C_OK       0
+#define C_NOK     -1
+
+#define MAX_STR   64
+#define MAX_CAP  128
+
+typedef enum {ORDER_BY_AUTHOR, ORDER_BY_RATING} OrderType;
+
+typedef struct {
+  int   id;
+  char  title[MAX_STR];
+  char  author[MAX_STR];
+  int   year;
+  float rating;
+} BookType;
+
+typedef struct {
+  BookType *elements[MAX_CAP];
+  int size;
+  OrderType order;
+} BookArrayType;
+
+typedef struct {
+  char name[MAX_STR];
+  BookArrayType books;
+} BookClubType;
+
+
+void printMenu(int*);
+void loadBookData(BookClubType*);
+
+void initBookClub(BookClubType*, char*);
+void initBookArray(BookArrayType*, OrderType);
+void initBook(BookType*, int, char*, char*, int, float);
+
+int  addBookToClub(BookClubType*, int, char*, char*, char*, int, float);
+int  addBookToArray(BookArrayType*, BookType*);
+int  findInsPt(BookArrayType*, BookType*, int*);
+
+void printBooks(BookClubType*);
+void printTopRatedBooks(BookClubType*);
+void printBookArray(BookArrayType*);
+void printBook(BookType*);
+void cleanupBookArray(BookArrayType*);
+
+load.c                                                                                              0000644 0001750 0001750 00000007122 14431164610 012317  0                                                                                                    ustar   claurend                        claurend                                                                                                                                                                                                               #include "defs.h"
+
+
+void loadBookData(BookClubType *club)
+{
+  int bookId = 1001;
+
+  addBookToClub(club, bookId++, "Ender's Game", "Orson Scott", "Card", 1985, 4.31);
+  addBookToClub(club, bookId++, "Dune Messiah", "Frank", "Herbert", 1969, 3.89);
+  addBookToClub(club, bookId++, "Dune", "Frank", "Herbert", 1965, 4.26);
+  addBookToClub(club, bookId++, "The End of Eternity", "Isaac", "Asimov", 1955, 4.24);
+  addBookToClub(club, bookId++, "Foundation", "Isaac", "Asimov", 1951, 4.17);
+  addBookToClub(club, bookId++, "Hitch Hiker's Guide to the Galaxy", "Douglas", "Adams", 1979, 4.23);
+  addBookToClub(club, bookId++, "1984", "George", "Orwell", 1949, 4.19);
+  addBookToClub(club, bookId++, "Farenheit 451", "Ray", "Bradbury", 1954, 3.97);
+  addBookToClub(club, bookId++, "2001:  A Space Odyssey", "Arthur C.", "Clarke", 1968, 4.16);
+  addBookToClub(club, bookId++, "Do Androids Dream of Electric Sheep?", "Philip K.", "Dick", 1968, 4.09);
+  addBookToClub(club, bookId++, "Neuromancer", "William", "Gibson", 1984, 3.9);
+  addBookToClub(club, bookId++, "The Fall of Hyperion", "Dan", "Simmons", 1990, 4.22);
+  addBookToClub(club, bookId++, "A Fire Upon the Deep", "Vernor", "Vinge", 1992, 4.13);
+  addBookToClub(club, bookId++, "Hyperion", "Dan", "Simmons", 1989, 4.25);
+  addBookToClub(club, bookId++, "Foundation and Empire", "Isaac", "Asimov", 1952, 4.22);
+
+  addBookToClub(club, bookId++, "Lord of the Flies", "William", "Golding", 1954, 3.69);
+  addBookToClub(club, bookId++, "Rebecca", "Daphne", "du Maurier", 1938, 4.24);
+  addBookToClub(club, bookId++, "Kidnapped", "Robert Louis", "Stevenson", 1886, 3.79);
+  addBookToClub(club, bookId++, "Treasure Island", "Robert Louis", "Stevenson", 1883, 3.84);
+  addBookToClub(club, bookId++, "Charlotte's Web", "E.B.", "White", 1952, 4.19);
+  addBookToClub(club, bookId++, "To Kill a Mockingbird", "Harper", "Lee", 1960, 4.27);
+  addBookToClub(club, bookId++, "The Lion, the Witch and the Wardrobe", "C.S.", "Lewis", 1950, 4.23);
+  addBookToClub(club, bookId++, "Never Let Me Go", "Kazuo", "Ishiguro", 2005, 3.84);
+  addBookToClub(club, bookId++, "Jane Eyre", "Charlotte", "Bronte", 1847, 4.14);
+  addBookToClub(club, bookId++, "Flowers for Algernon", "Daniel", "Keyes", 1966, 4.19);
+  addBookToClub(club, bookId++, "Lost Horizon", "James", "Hilton", 1933, 3.95);
+  addBookToClub(club, bookId++, "The Count of Monte Cristo", "Alexandre", "Dumas", 1844, 4.29);
+
+  addBookToClub(club, bookId++, "Starlight", "Richard", "Wagamese", 2018, 4.26);
+  addBookToClub(club, bookId++, "The Shell Seekers", "Rosamunde", "Pilcher", 1987, 4.18);
+  addBookToClub(club, bookId++, "The Snow Walker", "Farley", "Mowat", 1977, 4.07);
+  addBookToClub(club, bookId++, "The Fionavar Tapestry", "Guy Gavriel", "Kay", 1984, 4.23);
+  addBookToClub(club, bookId++, "Still Life", "Louise", "Penny", 2005, 3.90);
+  addBookToClub(club, bookId++, "Evangeline, A Tale of Acadie", "Henry Wadsworth", "Longfellow", 1847, 3.94);
+  addBookToClub(club, bookId++, "Murder on the Orient Express", "Agatha", "Christie", 1934, 4.2);
+  addBookToClub(club, bookId++, "All Our Wrong Todays", "Elan", "Mastai", 2017, 3.75);
+  addBookToClub(club, bookId++, "The Girl on the Train", "Paula", "Hawkins", 2015, 3.95);
+  addBookToClub(club, bookId++, "Beauty", "Sheri S.", "Tepper", 1991, 3.83);
+  addBookToClub(club, bookId++, "The Midnight Library", "Matt", "Haig", 2020, 4.02);
+  addBookToClub(club, bookId++, "Tigana", "Guy Gavriel", "Kay", 1990, 4.09);
+  addBookToClub(club, bookId++, "Morning in the Burned House", "Margaret", "Atwood", 1995, 4.12);
+  addBookToClub(club, bookId++, "The Seven Deaths of Evelyn Hardcastle", "Stuard", "Turton", 2018, 3.86);
+}
+
+
+main.c                                                                                              0000644 0001750 0001750 00000001062 14431164555 012331  0                                                                                                    ustar   claurend                        claurend                                                                                                                                                                                                               #include <stdio.h>
+#include <string.h>
+
+#include "defs.h"
+
+int main()
+{
+
+  return(0);
+}
+
+void printMenu(int *choice)
+{
+  int c = -1;
+  int numOptions = 3;
+
+  printf("\nMAIN MENU\n");
+  printf("  (1) Print all books\n");
+  printf("  (2) Print top rated books\n");
+  printf("  (3) Add a book\n");
+  printf("  (0) Exit\n\n");
+
+  printf("Please enter your selection: ");
+  scanf("%d", &c);
+
+  if (c == 0) {
+    *choice = c;
+    return;
+  }
+
+  while (c < 0 || c > numOptions) {
+    printf("Please enter your selection: ");
+    scanf("%d", &c);
+  }
+
+  *choice = c;
+}
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
