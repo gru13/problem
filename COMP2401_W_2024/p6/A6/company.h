@@ -43,3 +43,21 @@ char *Cities[NUM_CITIES] = {
 #define SEATTLE  11
 
 	
+struct RowData{
+    short int EmpID;
+    unsigned char NSz;
+    char Name[20];
+    unsigned char job;
+    unsigned char dep;
+    unsigned char Bsunit;
+    unsigned char age;
+    short int year;
+    unsigned char mnt;
+    unsigned char day;
+    int salary;
+    unsigned char cnt;
+    unsigned char cty;
+    short int extYr;
+    unsigned char extMn;
+    unsigned char extDa;
+};
